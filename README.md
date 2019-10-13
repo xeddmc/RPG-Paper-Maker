@@ -5,7 +5,7 @@
 [![Build](https://travis-ci.org/RPG-Paper-Maker/RPG-Paper-Maker.svg?branch=develop)](https://travis-ci.org/RPG-Paper-Maker/RPG-Paper-Maker)
 [![Build](https://ci.appveyor.com/api/projects/status/iee74loc36pu1r0t?svg=true)](https://ci.appveyor.com/project/Wano-k/rpg-paper-maker)
 
-RPG Paper Maker is a free game making engine allowing you to create a 3D universe with many 2D sprites and even 3D objects using a simple interface (just like the RPG Maker series), RPG Paper Maker gives you a way to create RPGs in a full 3D world as simply as it is in 2D! RPG Paper Maker comes packed with cool retro inspired graphic assets for you to use in your own projects.
+RPG Paper Maker is a game making engine, free for non commercial use, allowing you to create a 3D universe with many 2D sprites and even 3D objects using a simple interface for all available platforms: Windows, Linux, and MacOS.
 
 ## Project organization
 The [organization](https://github.com/RPG-Paper-Maker) contains some independent repositories. If you want to fork several repositories, **you should put them all in the same parent root**. Example:
@@ -31,17 +31,18 @@ The [organization](https://github.com/RPG-Paper-Maker) contains some independent
 Linux:
 
         ./update-mods
-        
-Windows:        
+
+Windows:
 
         ./update-mods.bat
 
 **You should run this script when you want to update the recent dev changes for Basic Ressources and Game Scripts. This will first search your local changes, and then module github repo if you didn't clone it.**
 
 * Open QtCreator
-* Open the `engine.pro` file.
+* Open the `RPG-Paper-Maker.pro` file.
 * Run qmake (right click on project root).
-* Build and run the project.
+* Select the project to run (EditorApp or Test) in the bottom-left configuration pop-up
+* Build and run the project
 
 If you are having any error that means that you are missing a package. Check the error and try to find out what's missing. Please report any kind of error at Wanok.rpm@gmail.com to help other contributors.
 
@@ -50,32 +51,38 @@ If you are having any error that means that you are missing a package. Check the
 ### Tree
 
     --- RPG-Paper-Maker
-      |--- Engine.pro                     <- The .pro for opening the project with Qt Ctreator
-      |--- update-mods / update.mods      <- Script for copying dev changes done in other git repos
+      |--- RPG-Paper-Maker.pro            <- The .pro for opening the project with Qt Creator
+      |--- update-mods / update-mods.bat  <- Script for copying dev changes done in other git repos
       |--- versions.json / trees.json     <- Json used by the updater for checking files to update
       |--- .appveyor.yml / .travis.yml    <- Automated build tests
-      |--- ressources.qrc                 <- Linking all the ressources (shaders, images...) used in the engine
-      |--- main.cpp / main.h              <- The main function instructions
-      |--- Content                        <- Content is a folder that will contains all the stuff that needs to be copied in the build folder
-        |--- basic                        <- The basic Content folder to copy when creating a new project
-      |--- Controls                       <- Controlers used for complex dialog boxes or widgets / panels. Should contain all the actions to do on the dialog model
-        |--- MapEditor                    <- The map editor controler separated in several files
-      |--- CustomWidgets                  <- All the common custom widgets that can be re-used often are here. These components inherit from QWidget classes.
-      |--- Dialogs                        <- All the dialog boxes
-        |--- Commands                     <- All the dialog boxes used for object event commands
-        |--- SpecialElements              <- All the dialog boxes used for special elements (autotiles, walls, 3D objects)
-        |--- Systems                      <- All the dialog boxes used for system elements (SuperListItem classes)
-      |--- Enums                          <- All the enumerations
-      |--- MapEditor                      <- All the map editor models (sprite, floor, etc.)
-        |--- Map                          <- The map model (seprated in several files)
-      |--- MathUtils                      <- Copy of math utils from an old Qt version for 3D drawings
-      |--- Models                         <- All the models used for the database
-        |--- GameDatas                    <- All the gamedatas files models
-        |--- System                       <- All the models used for system elements (SuperListItem classes)
-      |--- Ressources                     <- All the images (icons) used for the engine
-      |--- Shaders                        <- All the shaders programs
-      |--- Singletons                     <- Contains RPM singleton
-      |--- Themes                         <- All the themes of the engine
+      |--- Editor
+        |--- Editor.pro                   <- The sub-project to build the editor library
+        |--- ressources.qrc               <- Linking all the ressources (shaders, images...) used in the editor
+        |--- Content                      <- Content is a folder that will contain all the stuff that needs to be copied in the build folder
+          |--- basic                      <- The basic Content folder to copy when creating a new project
+        |--- Controls                     <- Controllers used for complex dialog boxes or widgets / panels. Should contain all the actions to do on the dialog model
+          |--- MapEditor                  <- The map editor controller separated in several files
+        |--- CustomWidgets                <- All the common custom widgets that can be re-used often are here. These components inherit from QWidget classes.
+        |--- Dialogs                      <- All the dialog boxes
+          |--- Commands                   <- All the dialog boxes used for object event commands
+          |--- SpecialElements            <- All the dialog boxes used for special elements (autotiles, walls, 3D objects)
+          |--- Systems                    <- All the dialog boxes used for system elements (SuperListItem classes)
+        |--- Enums                        <- All the enumerations
+        |--- MapEditor                    <- All the map editor models (sprite, floor, etc.)
+          |--- Map                        <- The map model (separated in several files)
+        |--- MathUtils                    <- Copy of math utils from an old Qt version for 3D drawings
+        |--- Models                       <- All the models used for the database
+          |--- GameDatas                  <- All the gamedata files models
+          |--- System                     <- All the models used for system elements (SuperListItem classes)
+        |--- Ressources                   <- All the images (icons) used for the editor
+        |--- Shaders                      <- All the shaders programs
+        |--- Singletons                   <- Contains RPM singleton
+        |--- Themes                       <- All the themes of the editor
+      |--- EditorApp
+        |--- EditorApp.pro                <- The sub-project to build the editor executable
+        |--- main.cpp                     <- The main function instructions
+      |--- Test
+        |--- Test.pro                     <- The sub-project to build the test executable
 
 ### RPM Singleton
 
@@ -129,16 +136,22 @@ RPG Paper Maker has a `master` branch for stable releases and a `develop` branch
 
 **If you want to add new features or correct a bug** for the next stable version, we are always using this [Trello board](https://trello.com/b/mMsMtdi1/rpm) which is listing all the features that needs to be completed for the next release. If you would like to do one of the task in this todo list, you should signal that you are on it in the [Git chat](https://gitter.im/RPG-Paper-Maker/Lobby). Same thing if you want to do anything that is not already in the todo list.
 
+#### Automated tests
+
+We recommend contributors to add unit tests to verify the behavior of new features and bugfixes as much as possible. Start by testing low-level functions, then depending on the complexity, add tests for higher level behaviors.
+
+Everything related to testing is located in the `Test` folder, which contains the test project `Test.pro` as well as test sources `test_xxx.cpp`. We use **Qt Test** as test framework; you will find more information in the [official documentation](https://doc.qt.io/qt-5/qttest-index.html) as well as in tutorials such as [this series on making unit tests for both plain C++ and Qt GUI](http://blog.davidecoppola.com/2017/11/cpp-unit-testing-with-qt-test-introduction/).
+
+The Test project is still very young, so there are not many test files. When adding a test for a class `MyClass` that doesn't have an associated test class already, just add a `test_myclass.cpp` to the Test project, directly under the `Test` directory. Later, when we have more tests, we will organize them in sub-directories.
+
+All tests are run during Continuous Integration with Travis, including during PR submission.
+
 ### Code style
 
 Try to respect the code style as much as possible. See the wiki page for code style [here](https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/wiki/Coding-style).
 
 ### Documentation
 Always check out our [documentation](http://rpg-paper-maker.com/index.php/documentation) here.
-
-## License
-
-RPG Paper Maker is a free software under GNU GPLv.3 license. See LICENSE.txt.
 
 ## Feature requests
 
